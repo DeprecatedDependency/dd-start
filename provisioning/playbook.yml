@@ -18,3 +18,10 @@
     - name: start mongo
       sudo: yes
       service: name=mongod state=started
+
+    - name: instal pymongo
+      sudo: yes
+      pip: name=pymongo
+
+    - name: create mongo user
+      mongodb_user: database=dd_db name=dd_user password=dd_raw_password state=present
