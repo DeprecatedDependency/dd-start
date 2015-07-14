@@ -1,0 +1,20 @@
+---
+- hosts: all
+  tasks:
+
+    - name: check that mongodb-org repo added
+      stat: path=/etc/yum.repos.d/mongodb-org-3.0.repo
+      register: mongo_repo_file
+
+    - name: add mongodb-org repository
+      sudo: yes
+      copy: src=mongodb-org-3.0.repo dest=/etc/yum.repos.d/mongodb-org-3.0.repo owner=root group=root
+      when: mongo_repo_file.stat.exists == False
+
+    - name: install mongodb-org
+      sudo: yes
+      yum: pkg=mongodb-org state=latest
+
+    - name: start mongo
+      sudo: yes
+      service: name=mongod state=started
